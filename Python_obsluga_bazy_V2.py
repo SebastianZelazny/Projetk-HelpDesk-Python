@@ -2,12 +2,12 @@
 import pymysql
 import datetime
 import random
-import CAdmin
-import CRepairer
-import CRequester
+from CAdmin import CAdmin
+from CRepairer import CRepairer
+from CRequester import CRequester
 
 
-class MenuDB:
+class MenuDB(CAdmin,CRepairer,CRequester):
     def __init__(self, login, haslo):
         self.conn = pymysql.connect("localhost", "root", "Seb@stian1.", "projekt1")
         self.cursor = self.conn.cursor()   						 
@@ -27,15 +27,15 @@ class MenuDB:
             
         ###Repairer###############    
         if(self.cursor.rowcount == 1 and (self.rola == 'rep')):
-            self.ID_login_rep()
-            self.repairer()       
+            CRepairer.ID_login_rep(self)
+            CRepairer.repairer(self)       
         ####Reqester
         elif((self.cursor.rowcount == 1) and (self.rola == 'req')):
-            self.ID_login_req()
-            self.requester()
+            CRequester.ID_login_req(self)
+            CRequester.requester(self)
         ####Admin    
         elif((self.cursor.rowcount == 1) and (self.rola == 'adm')):
-            self.Admin()
+            CAdmin.Admin(self)
         else:
             print('blad logowania')
             

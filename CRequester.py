@@ -20,7 +20,7 @@ class CRequester:
         
     def requester(self):
         print('logowanie poprawne reqester')
-        self.i = input('Co chcesz zrobić: \n 1.-Dodaj zgłoszenie \n 2. Podejrzj zgłoszenie \n 3.Otwrzo ponownie zgłoszenie \n(Q)-wyjście \n Wybor: ')
+        self.i = input('Co chcesz zrobić: \n 1.-Dodaj zgłoszenie \n 2. Podejrzj zgłoszenie \n 3. Otwrzo ponownie zgłoszenie \n(Q)-wyjście \n Wybor: ')
         if(self.i == '1'):
             print("Dodaje zgłoszenie")
             self.list_of_repairers()

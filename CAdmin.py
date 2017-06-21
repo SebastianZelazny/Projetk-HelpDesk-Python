@@ -161,15 +161,15 @@ class CAdmin(CRepairer):
         self.sql16 = "SELECT * FROM statusy"
         self.cursor.execute(self.sql16)
         self.results = self.cursor.fetchall() 
-        print ("%5s%15s" % ("ID","Status") )
+        print ("%5s%30s" % ("ID","Status") )
         for row in self.results:
             self.ID_S = row[0]
-            self.Status = row[1]           	 
-            print ("%5s%15" % (self.ID_S, self.Status))    
+            self.Statuss = row[1]           	 
+            print("%5s%30s" % (self.ID_S,self.Statuss))    
 
     def AddStatus(self):
         self.NStatus = input("Podaj nowy status:")
-        self.sql17 ="INSERT INTO statusy (Status) VALUES (%s)"
+        self.sql17 ="INSERT INTO statusy (Status_s) VALUES (%s)"
         self.cursor.execute(self.sql17,(self.NStatus))
         self.conn.commit()
         print("Status dodano prawidłowo")
@@ -193,11 +193,11 @@ class CAdmin(CRepairer):
         for row in self.results:
             self.ID_P = row[0]
             self.priority  = row[1]           	 
-            print ("%5s%20" % (self.ID_P, self.priority ))
+            print ("%5s%20s" % (self.ID_P, self.priority ))
 
     def AddPriority(self):
         self.NPriority = input("Podaj nowy Priorytet:")
-        self.sql20 ="INSERT INTO priorities (priority) VALUES (%s)"
+        self.sql20 ="INSERT INTO priorities (priority_p) VALUES (%s)"
         self.cursor.execute(self.sql20,(self.NPriority))
         self.conn.commit()
         print("Priorytet dodano prawidłowo")
