@@ -8,38 +8,67 @@ from CRequester import CRequester
 
 
 class MenuDB(CAdmin,CRepairer,CRequester):
-    def __init__(self, login, haslo):
-        self.conn = pymysql.connect("localhost", "root", "Seb@stian1.", "projekt1")
-        self.cursor = self.conn.cursor()   						 
-        self.login = login
-        self.haslo = haslo
-        self.logowanie()
+    
+    def __init__(self):
+        try:
+            self.conn = pymysql.connect("localhost", "root", "Seb@stian1.", "projekt1")
+            self.cursor = self.conn.cursor()
+        except:
+            print("Nie udało sie nawiazac polaczenia z baza")
         
+        self.licznik=0
+        self.proby=3             
+        self.logowanie()           
+        
+            
+            
+            
+            
     def logowanie(self):
+        self.login = input("Podaj login: ")
+        self.haslo = input("Podaj haslo: ")
+        self.Locked=''
         self.rola = ''
         self.sql2 = 'SELECT * FROM logins WHERE login=%s AND password=%s'
         self.cursor.execute(self.sql2,(self.login, self.haslo))
         self.results = self.cursor.fetchall()
         
         for row in self.results:
-            self.role = row[3]
-            self.rola= self.role
+            self.Locked = row[4]
+        
+        if(self.Locked==False):            
+            if(self.cursor.rowcount == 1):
+                print("Logowanie przebieglo pomyslnie")
             
-        ###Repairer###############    
-        if(self.cursor.rowcount == 1 and (self.rola == 'rep')):
-            CRepairer.ID_login_rep(self)
-            CRepairer.repairer(self)       
-        ####Reqester
-        elif((self.cursor.rowcount == 1) and (self.rola == 'req')):
-            CRequester.ID_login_req(self)
-            CRequester.requester(self)
-        ####Admin    
-        elif((self.cursor.rowcount == 1) and (self.rola == 'adm')):
-            CAdmin.Admin(self)
+                for row in self.results:
+                    self.role = row[3]
+                    self.rola= self.role
+                    
+                ###Repairer###############    
+                if(self.rola == 'rep'):
+                    CRepairer.repairer(self)       
+                ####Reqester
+                elif(self.rola == 'req'):
+                    CRequester.requester(self)
+                ####Admin    
+                elif(self.rola == 'adm'):
+                    CAdmin.Admin(self)
+            else:
+                self.licznik=self.licznik+1
+                self.proby=self.proby-1
+                if(self.licznik<3):
+                    print('blędne hasło lub login !!!! Zostało: '+str(self.proby))
+                    self.logowanie()
+                else:
+                    CAdmin.BlockAccountAuto(self)
+                    print("Konto zostało zablokowane")
+        elif(self.Locked==True):
+            print("Konto jest zablokowane proszę o kontakt z Administratorem @SebastianŻelazny")
         else:
-            print('blad logowania')
+            print("Podany login nie istnieje w bazie")
+            self.logowanie()
             
-o1 = MenuDB(input("Podaj login: "),input("Podaj haslo: "))            
+o1 = MenuDB()            
 """            
     def ID_login_rep(self):
         self.ID_log=""

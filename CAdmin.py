@@ -26,29 +26,64 @@ class CAdmin(CRepairer):
             self.Admin()
             
            
-    def Admin_Users(self):
-        self.j = input(" (1)-Dodaj uzytkownika, \n (2)-Zaktualizuj uzytkownika, \n (3)-Usun uzytkownika, \n (4)-Zmien hasło, \n (B)-cofnij \n Wybor: ")
+    def Admin_Users(self): 
+        self.j = input(" (1)-Pokaz serwisantow, \n (2)-Pokaz uzytkownikow, \n=====================\n (3)-Dodaj uzytkownika, \n=====================\n (4)-Zaktualizuj serwisanta, \n (5)-Zaktualizuj uzytkownika, \n===================== \n (6)-Usun serwisanta, \n (7)-Usun uzytkownika, \n=====================\n (8)-Wyświetl loginy, \n (9)-Zmien hasło, \n (A)-Odblokuj konto, \n (S)-Zablokuj konto, \n=====================\n (B)-cofnij \n Wybor: ")
         if(self.j=='1'):
+            print("Pokazuje serwisantow")
+            self.ShowRepairers()
+            self.Admin_Users()
+        elif(self.j=='2'):
+            print("Pokazuje uzytkownika")
+            self.ShowRequesters()
+            self.Admin_Users()            
+        elif(self.j=='3'):
             print("Dodaje uzytkownika")
             self.AddUser()
             self.Admin_Users()
-        elif(self.j=='2'):
-            print("Modyfikuje uzytkownika")
-            self.UpdateUser()
-            self.Admin_Users()
-        elif(self.j=='3'):
-            print("Usuwam uzytkownika")
-            self.deleteUser()
-            self.Admin_Users()
         elif(self.j=='4'):
+            print("Modyfikuje Serwisanta")
+            self.ShowRepairers()
+            self.UpdateRepairer()
+            self.Admin_Users()
+        elif(self.j=='5'):
+            print("Modyfikuje Uzytkowniak")
+            self.ShowRequesters()
+            self.UpdateRequester()
+            self.Admin_Users()            
+        elif(self.j=='6'):
+            print("Usuwam serwisanta")
+            self.ShowRepairers()
+            self.DeleteRepairer()
+            self.Admin_Users()
+        elif(self.j=='7'):
+            print("Usuwam Uzytkownika")
+            self.ShowRequesters()
+            self.DeleteRequester()
+            self.Admin_Users()
+        elif(self.j=='8'):
+            print("Wyświetlam Loginy")
+            self.ShowLogins()
+            self.Admin_Users()
+        elif(self.j=='9'):
             print("Zmieniam hasło")
+            self.ShowLogins()
             self.ChangePass()
             self.Admin_Users()
+        elif(self.j=='a' or self.j=='A'):
+            print("Odblokuj konto")
+            self.ShowLogins()
+            self.UnBlockAccount()
+            self.Admin_Users()
+        elif(self.j=='s' or self.j=='S'):
+            print("Odblokuj konto")
+            self.ShowLogins()
+            self.BlockAccountSelf()
+            self.Admin_Users()            
         elif(self.j=='b' or self.j=='B'):
             print("Cofam do poprzedniego Menu")
             self.Admin()
         else:
-            print("Podano nieprawidlowa opcje dozwolone(1,2,3,4,b)");
+            print("Podano nieprawidlowa opcje dozwolone(1,2,3,4,5,6,7,8,9,B,A,S)");
             self.Admin_Users()
         
     def Admin_Reports(self):
@@ -76,12 +111,12 @@ class CAdmin(CRepairer):
             print("Cofam do poprzedniego Menu")
             self.Admin()
         else:
-            print("Podano nieprawidlowa opcje dozwolone(s,u,c,d,B)");
+            print("Podano nieprawidlowa opcje dozwolone(1,2,3,4,B)");
             self.Admin_Reports()        
             
             
     def Admin_Sys(self):    
-        self.j = input("(1)- Wyświetl wszystkie statusy, \n (2)-Dodaj Nowy status, \n (3)-Usun status \n  ================================= \n (4)- Wyświetl wszystkie Priorytety, \n (5)-Dodaj Priorytet, \n (6)-Usun Priorytet, \n  ================================= \n (7)- Wyświetl wszystkie dzialy, \n (8)-Dodaj dzial, \n (9)-Usun dzial, \n (B)-cofnij \n Wybor: ")
+        self.j = input(" (1)-Wyświetl wszystkie statusy, \n (2)-Dodaj Nowy status, \n (3)-Usun status \n  ================================= \n (4)-Wyświetl wszystkie Priorytety, \n (5)-Dodaj Priorytet, \n (6)-Usun Priorytet, \n  ================================= \n (7)-Wyświetl wszystkie dzialy, \n (8)-Dodaj dzial, \n (9)-Usun dzial, \n=====================\n (B)-cofnij \n Wybor: ")
         if(self.j=='1'):
             print("Wyświetlam Wszystkie statusy")
             self.AllStatus()
@@ -184,7 +219,7 @@ class CAdmin(CRepairer):
             self.conn.commit()
             print("Wprowadzanie nowego serwisanta przebieglo pomyslnie")
         else:
-            print("Podano nieprawidłowy numer dywizji")
+            print("Podano nieprawidłowy numer dzialu")
             self.AddRepairer()
             
     def CountDivision(self):
@@ -195,7 +230,7 @@ class CAdmin(CRepairer):
         for row in self.results:
             self.number_of_branches = row[0]
             
-        print(self.number_of_branches)    
+        #print(self.number_of_branches)    
     def ChangePass(self):
         self.ID_L = input("Podaj ID uzytkownika do zmiany hasła: ") 
         self.NPass = input("Podaj nowe hasło: ")
@@ -205,11 +240,60 @@ class CAdmin(CRepairer):
         print("Hasło zostało zmienione pomyślnie")
 
     def ShowRepairers(self):
-        self.sql30  = "SELECT *"
-        print()
+        self.sql30  = "SELECT * FROM repairers"
+        self.cursor.execute(self.sql30)
+        self.results = self.cursor.fetchall() 
+        print ("%5s%5s%15s%15s%25s%20s" % ("ID_Rep","ID_L","Name","Surname","E-mail","Division"))
+        for row in self.results:
+            self.ID_rep = row[0]
+            self.ID_Login_repp = row[1]
+            self.Name_repp = row[2]
+            self.Surname_repp = row[3]
+            self.Email_repp = row[4]
+            self.division_repp = row[5]
+            print ("%5s%5s%15s%15s%25s%20s" % (self.ID_rep,self.ID_Login_repp, self.Name_repp,self.Surname_repp,self.Email_repp,self.division_repp))
+    
+    
     def ShowRequesters(self):
-        print()
+        self.sql31  = "SELECT * FROM requester"
+        self.cursor.execute(self.sql31)
+        self.results = self.cursor.fetchall() 
+        print ("%5s%5s%15s%15s%25s" % ("ID_Req","ID_L","Name","Surname","E-mail"))
+        for row in self.results:
+            self.ID_req = row[0]
+            self.ID_Login_reqq = row[1]
+            self.Name_reqq = row[2]
+            self.Surname_reqq = row[3]
+            self.Email_reqq = row[4]
+            print ("%5s%5s%15s%15s%25s" % (self.ID_req,self.ID_Login_reqq, self.Name_reqq,self.Surname_reqq,self.Email_reqq))        
 
+    def UpdateRepairer(self):
+        self.ID_repp = input("Podaj ID serwisanta którego chcesz zaktualizować: ")
+        self.name_repp = input("Podaj imie: ")
+        self.surname_repp = input("Podaj nazwisko: ")
+        self.Email_repp = input("Podaj e-mail: ")
+        self.AllDivisions()
+        self.division_repp = input("Podaj dział: ")
+        self.CountDivision()
+        if(int(self.division_repp)>=1 and int(self.division_repp) <=int(self.number_of_branches)):        
+            self.sql32 = "UPDATE repairers SET name_rep=%s,surname_rep=%s,E_mail_rep=%s,division=%s WHERE ID_rep=%s"
+            self.cursor.execute(self.sql32,(self.name_repp, self.surname_repp,self.Email_repp,self.division_repp,self.ID_repp))
+            self.conn.commit()
+            print("UPDATE przebiegł pomyślnie")
+        else:
+            print("Podano nieprawidłowy numer dzialu")
+            self.UpdateRepairer()
+            
+    def UpdateRequester(self):
+        self.ID_reqq = input("Podaj ID Uzytkownika którego chcesz zaktualizować: ")
+        self.name_reqq = input("Podaj imie: ")
+        self.surname_reqq = input("Podaj nazwisko: ")
+        self.Email_reqq = input("Podaj e-mail: ")
+        self.sql33 = "UPDATE requester SET name_req=%s,surname_req=%s,E_mail_req=%s WHERE ID_req=%s"
+        self.cursor.execute(self.sql33,(self.name_reqq, self.surname_reqq,self.Email_reqq,self.ID_reqq))
+        self.conn.commit()
+        print("UPDATE przebiegł pomyślnie")
+        
     def AllStatus(self): 
         self.sql16 = "SELECT * FROM statusy"
         self.cursor.execute(self.sql16)
@@ -294,4 +378,99 @@ class CAdmin(CRepairer):
         else:
             self.DeletePriority()
             
+    def DeleteRepairer(self):
+        self.ID_rep = input("Podaj id serwisanta do usuniecia: ")
+        self.decyzja = input("Czy napewno chce usunac(t/n): ")        
+        if(self.decyzja=='t'):
+            self.permissionDeleteOff()
+            self.SelectDeleteLoginRep()
+            self.sql34 = "DELETE FROM repairers WHERE ID_rep=%s"
+            self.cursor.execute(self.sql34,(self.ID_rep))
             
+            self.DeleteLogin()            
+            self.conn.commit()
+            self.permissionDeleteOn()
+            print("Serwisanta Usunięto prawidłowo")
+        else:
+            self.DeleteRepairer()
+            
+    def DeleteRequester(self):
+        self.ID_req = input("Podaj id uzytkownika do usuniecia: ")
+        self.decyzja = input("Czy napewno chce usunac(t/n): ")       
+        if(self.decyzja=='t'): 
+            self.permissionDeleteOff()
+            self.SelectDeleteLoginReq()
+            self.sql35 = "DELETE FROM requester WHERE ID_req=%s"
+            self.cursor.execute(self.sql35,(self.ID_req))
+            
+            self.DeleteLogin()            
+            self.conn.commit()
+            self.permissionDeleteOn()
+            print("Uzytkownika Usunięto prawidłowo")
+        else:
+            self.DeleteRequester()
+     
+     
+    def SelectDeleteLoginRep(self):
+        self.ID_to_del=''
+        self.sql36 = "SELECT * FROM logins LEFT JOIN repairers ON logins.ID_L=repairers.ID_Login_rep WHERE ID_rep=%s"
+        self.cursor.execute(self.sql36,(self.ID_rep))
+        self.results = self.cursor.fetchall()
+        for row in self.results:
+            self.ID_to_del = row[0]
+        print(self.ID_to_del)  
+        
+    def SelectDeleteLoginReq(self):
+        self.ID_to_del=''
+        self.sql36 = "SELECT * FROM logins LEFT JOIN requester ON logins.ID_L=requester.ID_Login_req WHERE ID_req=%s"
+        self.cursor.execute(self.sql36,(self.ID_req))
+        self.results = self.cursor.fetchall()
+        for row in self.results:
+            self.ID_to_del = row[0]            
+        print(self.ID_to_del)
+        
+    def DeleteLogin(self):
+        print("DelLogin")
+        print(self.ID_to_del)
+        self.sql37 = "DELETE FROM logins WHERE ID_L=%s"
+        self.cursor.execute(self.sql37,(self.ID_to_del))
+        self.conn.commit()
+        
+    def permissionDeleteOff(self):
+        self.sql38 = "SET foreign_key_checks = 0"
+        self.cursor.execute(self.sql38)
+    def permissionDeleteOn(self):
+        self.sql39 = "SET foreign_key_checks = 1"
+        self.cursor.execute(self.sql39)        
+        
+    def ShowLogins(self):
+        self.sql40 = "SELECT * FROM logins"
+        self.cursor.execute(self.sql40)
+        self.results = self.cursor.fetchall()
+        print("%5s%10s%10s%5s%3s" % ("ID_L","Login","Password","Role","Lock"))
+        for row in self.results:
+            self.ID_L = row[0]
+            self.Login = row[1]
+            self.Password = "********"
+            self.role = row[3]
+            self.Lock = row[4]
+            print("%5s%10s%10s%5s%3s" % (self.ID_L,self.Login,self.Password,self.role,self.Lock))
+    
+    ##### Blokowanie konta automatycznie"""""   
+    def BlockAccountAuto(self): 
+        self.sql41 = "UPDATE Logins SET Locked=True where Login=%s"
+        self.cursor.execute(self.sql41,(self.login))
+        self.conn.commit()     
+    
+    ####### Odblokowanie Konta
+    def UnBlockAccount(self):
+        self.ID_UnBlock_A = input("Podaj ID który chciał bys odblokować ")
+        self.sql42 = "UPDATE Logins SET Locked=False where ID_L=%s"
+        self.cursor.execute(self.sql42,(self.ID_UnBlock_A))
+        self.conn.commit()   
+    
+    def BlockAccountSelf(self): 
+        self.ID_Block_A = input("Podaj ID który chciał bys zablokować ")
+        self.sql43 = "UPDATE Logins SET Locked=True where ID_L=%s"
+        self.cursor.execute(self.sql43,(self.ID_Block_A))
+        self.conn.commit() 
