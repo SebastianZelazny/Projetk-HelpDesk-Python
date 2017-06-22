@@ -27,19 +27,23 @@ class CAdmin(CRepairer):
             
            
     def Admin_Users(self):
-        self.j = input("(1)-Dodaj uzytkownika, \n (2)-Zaktualizuj uzytkownika, \n (3)-Usun uzytkownika, \n (4)-Zmien hasło,(B)-cofnij \n Wybor: ")
+        self.j = input(" (1)-Dodaj uzytkownika, \n (2)-Zaktualizuj uzytkownika, \n (3)-Usun uzytkownika, \n (4)-Zmien hasło, \n (B)-cofnij \n Wybor: ")
         if(self.j=='1'):
             print("Dodaje uzytkownika")
             self.AddUser()
+            self.Admin_Users()
         elif(self.j=='2'):
             print("Modyfikuje uzytkownika")
             self.UpdateUser()
+            self.Admin_Users()
         elif(self.j=='3'):
             print("Usuwam uzytkownika")
             self.deleteUser()
+            self.Admin_Users()
         elif(self.j=='4'):
             print("Zmieniam hasło")
             self.ChangePass()
+            self.Admin_Users()
         elif(self.j=='b' or self.j=='B'):
             print("Cofam do poprzedniego Menu")
             self.Admin()
@@ -129,25 +133,69 @@ class CAdmin(CRepairer):
         self.NPass=input("Podaj hasło: ")
         self.NRole=input("Podaj role((rep)-repairer,(req)-requester) : ")
         if(self.NRole=='rep' or self.NRole=='req'):
-            self.sql13 = "INSERT INTO Logins (Login,password) VALUES (%s,%s)"
-            self.cursor.execute(self.sql13,(self.NLogin, self.NPass))
+            self.sql13 = "INSERT INTO Logins (Login,password,Role) VALUES (%s,%s,%s)"
+            self.cursor.execute(self.sql13,(self.NLogin, self.NPass,self.NRole))
             self.conn.commit()
             print("Dodano prawidłowo")
             if(self.NRole=='req'):
-                self.UpdateRequester()
+                self.AddRequester()
             else:
-                self.UpdateRepairer()
+                self.AddRepairer()
         else:
             print("Podano nieprawidłowy parametr dozwolone(rep,req) ")
             self.AddUser()
 
     ######Uzupełnic ##########    
-    def UpdateRequester(self): 
-        print()
+    def AddRequester(self): 
+        self.ID_Login_req=''
+        self.sql26 = "SELECT * FROM logins left join requester on requester.ID_Login_req=logins.ID_L where logins.login=%s"
+        self.cursor.execute(self.sql26,(self.NLogin))
+        self.results = self.cursor.fetchall() 
+        for row in self.results:
+            self.ID_Login_req = row[0] 
+        print(self.ID_Login_req)
+        
+        self.name_req = input("Podaj Imie uzytkownika: ")
+        self.surname_req = input("Podaj Nazwisko uzytkownika: ")
+        self.Email_req = input("Podaj e-mail uzytkownika: ")
+        self.sql25 = "INSERT INTO requester (ID_Login_req,Name_req,Surname_req,E_mail_req) VALUES (%s,%s,%s,%s)"
+        self.cursor.execute(self.sql25,(self.ID_Login_req,self.name_req,self.surname_req,self.Email_req))
+        self.conn.commit()
+        print("Wprowadzanie nowego usera przebieglo pomyslnie")
 
-    def UpdateRepairer(self): 
-        print()   
-
+    def AddRepairer(self): 
+        self.ID_Login_rep=''
+        self.sql27 = "SELECT * FROM logins left join repairers on repairers.ID_Login_rep=logins.ID_L where logins.login=%s"
+        self.cursor.execute(self.sql27,(self.NLogin))
+        self.results = self.cursor.fetchall() 
+        for row in self.results:
+            self.ID_Login_rep = row[0] 
+        print(self.ID_Login_rep)
+        
+        self.name_rep = input("Podaj Imie serwisanta: ")
+        self.surname_rep = input("Podaj Nazwisko serwisanta: ")
+        self.Email_rep = input("Podaj e-mail serwisanta: ")
+        self.AllDivisions()
+        self.division_rep = input("Podaj dział który będzie obsługiwał: ")
+        self.CountDivision()
+        if(int(self.division_rep)>=1 and int(self.division_rep) <=int(self.number_of_branches)):
+            self.sql28 = "INSERT INTO repairers (ID_Login_rep,Name_rep,Surname_rep,E_mail_rep,division) VALUES (%s,%s,%s,%s,%s)"
+            self.cursor.execute(self.sql28,(self.ID_Login_rep,self.name_rep,self.surname_rep,self.Email_rep,self.division_rep))
+            self.conn.commit()
+            print("Wprowadzanie nowego serwisanta przebieglo pomyslnie")
+        else:
+            print("Podano nieprawidłowy numer dywizji")
+            self.AddRepairer()
+            
+    def CountDivision(self):
+        self.number_of_branches =''
+        self.sql29= "select count(ID_D) from divisions"
+        self.cursor.execute(self.sql29)
+        self.results = self.cursor.fetchall() 
+        for row in self.results:
+            self.number_of_branches = row[0]
+            
+        print(self.number_of_branches)    
     def ChangePass(self):
         self.ID_L = input("Podaj ID uzytkownika do zmiany hasła: ") 
         self.NPass = input("Podaj nowe hasło: ")
@@ -156,6 +204,11 @@ class CAdmin(CRepairer):
         self.conn.commit()
         print("Hasło zostało zmienione pomyślnie")
 
+    def ShowRepairers(self):
+        self.sql30  = "SELECT *"
+        print()
+    def ShowRequesters(self):
+        print()
 
     def AllStatus(self): 
         self.sql16 = "SELECT * FROM statusy"
