@@ -17,13 +17,9 @@ class MenuDB(CAdmin,CRepairer,CRequester):
             print("Nie udało sie nawiazac polaczenia z baza")
         
         self.licznik=0
-        self.proby=3             
+        self.proby=3  
         self.logowanie()           
-        
-            
-            
-            
-            
+               
     def logowanie(self):
         self.login = input("Podaj login: ")
         self.haslo = input("Podaj haslo: ")
@@ -36,8 +32,12 @@ class MenuDB(CAdmin,CRepairer,CRequester):
         for row in self.results:
             self.Locked = row[4]
         
-        if(self.Locked==False):            
-            if(self.cursor.rowcount == 1):
+            
+        
+            
+        if(self.cursor.rowcount == 1 and self.Locked==False):
+            
+            
                 print("Logowanie przebieglo pomyslnie")
             
                 for row in self.results:
@@ -53,7 +53,7 @@ class MenuDB(CAdmin,CRepairer,CRequester):
                 ####Admin    
                 elif(self.rola == 'adm'):
                     CAdmin.Admin(self)
-            else:
+        elif(self.cursor.rowcount == 0):
                 self.licznik=self.licznik+1
                 self.proby=self.proby-1
                 if(self.licznik<3):
@@ -64,9 +64,6 @@ class MenuDB(CAdmin,CRepairer,CRequester):
                     print("Konto zostało zablokowane")
         elif(self.Locked==True):
             print("Konto jest zablokowane proszę o kontakt z Administratorem @SebastianŻelazny")
-        else:
-            print("Podany login nie istnieje w bazie")
-            self.logowanie()
             
 o1 = MenuDB()            
 """            

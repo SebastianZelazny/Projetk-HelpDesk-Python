@@ -4,41 +4,41 @@ import datetime
 import random
 
 class CRequester: 						 
-           
     
+ 
     def ID_login_req(self):
-        self.ID_log=""
-        
         self.sql15 ="SELECT * FROM requester left join logins on requester.ID_Login_req=logins.ID_L where logins.login=%s"
         self.cursor.execute(self.sql15,(self.login))  
         self.results = self.cursor.fetchall()   					 
         
         for row in self.results:
-            self.ID_log = row[0]
+            self.ID_log_req = row[0]
         
-        print("Wyciagniety ID LOG: "+str(self.ID_log))  
+        print("Wyciagniety ID LOG: "+str(self.ID_log_req))  
         
     def requester(self):
         print('logowanie poprawne reqester')
         self.i = input('Co chcesz zrobić: \n 1.-Dodaj zgłoszenie \n 2. Podejrzj zgłoszenie \n 3. Otwrzo ponownie zgłoszenie \n(Q)-wyjście \n Wybor: ')
         if(self.i == '1'):
             print("Dodaje zgłoszenie")
+            self.ID_login_req()
             self.list_of_repairers()
             self.AddReports()
-            self.logowanie()
+            self.requester()
         elif(self.i == '2'):
-            print("Wyswietlam zgłoszenie")         
+            print("Wyswietlam zgłoszenie")
             self.ShowReportsReq()
-            self.logowanie()
+            self.requester()
         elif(self.i=='3'):
             print("Otwieram zgłoszenie")
+            self.ID_login_req()
             self.ShowReportsReq()
             self.OpenReport()
-            self.logowanie()
+            self.requester()
         elif((self.i == 'q') or (self.i == 'Q')):
             print("Koniec")
         else:
-            print("Podano zły znak proszę wybrać (1,2,q)")
+            print("Podano zły znak proszę wybrać (1,2,3,Q)")
             self.requester()
             
     def OpenReport(self):
@@ -46,7 +46,7 @@ class CRequester:
         self.status_z = input("Zmien Status na (2 - W realizacji )")
         if(self.status_z=="2"):
             self.sql11 = "UPDATE reports SET Status=%s WHERE (ID_Z=%s and requester=%s)"
-            self.cursor.execute(self.sql11,(self.status_z,self.ID,self.ID_log))
+            self.cursor.execute(self.sql11,(self.status_z,self.ID,self.ID_log_req))
             self.conn.commit()
             print("Status zmieniono pomyślnie")
         else:
@@ -74,7 +74,7 @@ class CRequester:
         #print(self.data)
         self.prior = input("Podaj Priorytet: ") 
         self.sql5 = "INSERT INTO reports (Title, description,Requester,Repairer,Data_R,priority) VALUES (%s,%s,%s,%s,%s,%s)"
-        self.cursor.execute(self.sql5,(self.title,self.descr,self.ID_log,self.logrep,self.data,self.prior))
+        self.cursor.execute(self.sql5,(self.title,self.descr,self.ID_log_req,self.logrep,self.data,self.prior))
         self.conn.commit()
                
         
