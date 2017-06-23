@@ -5,7 +5,9 @@ import random
 
 class CRequester: 						 
     
- 
+
+    #################### Pomocnicza Metoda sluzaca okreslenie ID Loginu uzytkownika w celu ograniczenia operacji tylko na swoich zgloszeniach  ###########################      
+    
     def ID_login_req(self):
         self.sql15 ="SELECT * FROM requester left join logins on requester.ID_Login_req=logins.ID_L where logins.login=%s"
         self.cursor.execute(self.sql15,(self.login))  
@@ -15,22 +17,24 @@ class CRequester:
             self.ID_log_req = row[0]
         
         print("Wyciagniety ID LOG: "+str(self.ID_log_req))  
-        
+     
+     
+    ################ Glowne Menu uzytkownika #######################    
     def requester(self):
         print('logowanie poprawne reqester')
         self.i = input('Co chcesz zrobić: \n 1.-Dodaj zgłoszenie \n 2. Podejrzj zgłoszenie \n 3. Otwrzo ponownie zgłoszenie \n(Q)-wyjście \n Wybor: ')
         if(self.i == '1'):
-            print("Dodaje zgłoszenie")
+            #print("Dodaje zgłoszenie")
             self.ID_login_req()
             self.list_of_repairers()
             self.AddReports()
             self.requester()
         elif(self.i == '2'):
-            print("Wyswietlam zgłoszenie")
+            #print("Wyswietlam zgłoszenie")
             self.ShowReportsReq()
             self.requester()
         elif(self.i=='3'):
-            print("Otwieram zgłoszenie")
+            #print("Otwieram zgłoszenie")
             self.ID_login_req()
             self.ShowReportsReq()
             self.OpenReport()
@@ -40,7 +44,9 @@ class CRequester:
         else:
             print("Podano zły znak proszę wybrać (1,2,3,Q)")
             self.requester()
-            
+     
+     
+    ############### Metoda ktora pozwala ponownie otworzyc zgloszenie ######################        
     def OpenReport(self):
         self.ID = input("Podaj ID Zgłoszenia do Otwarcia: ")
         self.status_z = input("Zmien Status na (2 - W realizacji )")
@@ -53,7 +59,7 @@ class CRequester:
             print("Podano zły parametr dozwolony tylko 2 - W realizacji")
             self.OpenReport        
     
-          
+    ################ Metoda ktora losuje serwisanta do zgloszenia #######################      
     def list_of_repairers(self):
         self.Lista=[]
         self.sql = "SELECT * FROM list_of_repairers"   						 
@@ -64,7 +70,8 @@ class CRequester:
             self.Login1 = row[0]
             self.Lista.append(self.Login1)    
         #print(self.Lista)
-            
+        
+    ############################## Metoda ktora dodaje nowe zgloszenie ###################
     def AddReports(self):
         self.title = input("Podaj tytul Zgłoszenia: ")
         self.descr = input("Podaj opis zgłoszenia: ")
@@ -77,7 +84,7 @@ class CRequester:
         self.cursor.execute(self.sql5,(self.title,self.descr,self.ID_log_req,self.logrep,self.data,self.prior))
         self.conn.commit()
                
-        
+    ########################### Metoda ktora pokazje zgloszenia tylko zalogowanego serwisanta ##################################    
     def ShowReportsReq(self):   
         
         self.sql6 = "SELECT ID_Z,Title,description,priority_p,E_mail_rep,E_mail_req,Status_s,Data_R FROM view_request_how_requester WHERE Login=%s"   						 

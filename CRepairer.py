@@ -5,7 +5,9 @@ import random
 import CRequester
 from CRequester import CRequester
 class CRepairer():  
-          
+    
+    
+    #################### Pomocnicza Metoda sluzaca okreslenie ID Loginu serwisanta ###########################      
     def ID_login_rep(self):
         self.ID_log=""
         
@@ -16,10 +18,12 @@ class CRepairer():
         for row in self.results:
             self.ID_log = row[0]
         
-        print("Wyciagniety ID LOG: "+str(self.ID_log))
+        #print("Wyciagniety ID LOG: "+str(self.ID_log))
     
+    
+    ############################ Glowne Menu serwisanta ############################
     def repairer(self):
-        print('logowanie poprawne repairer')
+        #print('logowanie poprawne repairer')
         self.i = input('Co robimy: \n (1)-Wyświetl Zgłoszenia, \n (2)-Podejrzyj swoje zgłoszenia, \n (3)-Zamknij zgłoszenie, \n (4)-Zaktualizuj zgłoszenie, \n (5)-Usun zgłoszenie, \n (Q)-wyjście \n Wybór: ')
         if (self.i =='1'):         
             self.ShowAllReports()
@@ -45,6 +49,8 @@ class CRepairer():
             print("Podałeś/aś nieprawidłową wartość wybierz 1,2,3,4,5,Q")
             self.repairer()
     
+    
+    ############################# Metoda która Pokazuje wszystkie zgloszenia zalogwanego serwisanta ###################################
     def ShowReportsRep(self):
         self.sql7 = "SELECT ID_Z,Title,description,priority_p,E_mail_rep,E_mail_req,Status_s,Data_R FROM view_request_how_repairer WHERE Login=%s"
         self.cursor.execute(self.sql7,(self.login))
@@ -60,7 +66,8 @@ class CRepairer():
             self.Status = row[6]
             self.Data_R = row[7]
             print ("%5s%40s%40s%15s%25s%25s%15s%15s" % (self.lp, self.Title, self.description,self.priority,self.repairerr,self.requesterr,self.Status,self.Data_R,)) 
-            
+     
+    #################################### Metoda pokazujaca wszystkie zgloszenia ####################################
     def ShowAllReports(self):
         self.sql8 = "SELECT ID_Z,Title,description,priority_p,E_mail_rep,E_mail_req,Status_s,Data_R FROM view_request_how_repairer group by ID_Z"
         self.cursor.execute(self.sql8)
@@ -77,7 +84,7 @@ class CRepairer():
             self.Data_R = row[7]
             print ("%5s%40s%40s%15s%25s%25s%15s%15s" % (self.lp, self.Title, self.description,self.priority,self.repairerr,self.requesterr,self.Status,self.Data_R,)) 
             
-            
+    ###################### Metoda sluzaca do zamkniecia zglszenia #####################################        
     def CloseReport(self):
         self.ID = input("Podaj ID Zgłoszenia do zamknięcia: ")
         self.status_z = input("Zmien Status : (3-Zamknięte )")
@@ -90,7 +97,7 @@ class CRepairer():
             print("Podano zły parametr dozwolone 1,2,3")
             self.CloseReport()
             
-            
+    ################################ Metoda sluzaca do aktualizacji opisu zgloszen ###########################        
     def UpdateReport(self):
         self.ID = input("Podaj ID Zgłoszenie do Update: ")
         self.title = input("Podaj Tytul: ")
@@ -110,7 +117,7 @@ class CRepairer():
             print("Podano zły parametr dozwolone 1,2,3,4")
             self.UpdateReport()
         
-        
+    ############################ Metoda pozwalajaca na usuniecie zgloszenia ################################    
     def DeleteReport(self):
         self.lp = input("Podaj ID Zgłoszenia do usuniecia: ")
         self.decyzja = input("Czy napewno chce usunac(t/n): ")        

@@ -7,17 +7,18 @@ from CRepairer import CRepairer
 
 class CAdmin(CRepairer):   
     
+    ############Glowne Menu Admina ########################################
     def Admin(self): 
         print('Logowanie poprawne Admin')
         self.i = input('Co robimy: \n (1)-Operacje na uzytkownikach, \n (2)-Operacje na zgłoszeniach, \n (3)-Operacje na systemie, \n (Q)-wyjście \n Wybór: ')
         if(self.i=='1'):
-            print("Przelaczam do obslugi uzytkownika")
+            #print("Przelaczam do obslugi uzytkownika")
             self.Admin_Users()
         elif(self.i=='2'):
-            print("Przelaczam do obslugi Zgłoszen")
+            #print("Przelaczam do obslugi Zgłoszen")
             self.Admin_Reports()
         elif(self.i=='3'):
-            print("Przelaczam do obsługe systemu")
+            #print("Przelaczam do obsługe systemu")
             self.Admin_Sys()        
         elif(self.i=='q' or self.i=='Q'):
             print("Koniec")
@@ -25,144 +26,146 @@ class CAdmin(CRepairer):
             print("Podano nie prawidlowy parametr dozwolone (1,2,3,q)")
             self.Admin()
             
-           
+    #################### Pedmenu Admina odnoszace sie do uzytkownikow ##########################       
     def Admin_Users(self): 
         self.j = input(" (1)-Pokaz serwisantow, \n (2)-Pokaz uzytkownikow, \n=====================\n (3)-Dodaj uzytkownika, \n=====================\n (4)-Zaktualizuj serwisanta, \n (5)-Zaktualizuj uzytkownika, \n===================== \n (6)-Usun serwisanta, \n (7)-Usun uzytkownika, \n=====================\n (8)-Wyświetl loginy, \n (9)-Zmien hasło, \n (A)-Odblokuj konto, \n (S)-Zablokuj konto, \n=====================\n (B)-cofnij \n Wybor: ")
         if(self.j=='1'):
-            print("Pokazuje serwisantow")
+            #print("Pokazuje serwisantow")
             self.ShowRepairers()
             self.Admin_Users()
         elif(self.j=='2'):
-            print("Pokazuje uzytkownika")
+            #print("Pokazuje uzytkownika")
             self.ShowRequesters()
             self.Admin_Users()            
         elif(self.j=='3'):
-            print("Dodaje uzytkownika")
+            #print("Dodaje uzytkownika")
             self.AddUser()
             self.Admin_Users()
         elif(self.j=='4'):
-            print("Modyfikuje Serwisanta")
+            #print("Modyfikuje Serwisanta")
             self.ShowRepairers()
             self.UpdateRepairer()
             self.Admin_Users()
         elif(self.j=='5'):
-            print("Modyfikuje Uzytkowniak")
+            #print("Modyfikuje Uzytkowniak")
             self.ShowRequesters()
             self.UpdateRequester()
             self.Admin_Users()            
         elif(self.j=='6'):
-            print("Usuwam serwisanta")
+            #print("Usuwam serwisanta")
             self.ShowRepairers()
             self.DeleteRepairer()
             self.Admin_Users()
         elif(self.j=='7'):
-            print("Usuwam Uzytkownika")
+            #print("Usuwam Uzytkownika")
             self.ShowRequesters()
             self.DeleteRequester()
             self.Admin_Users()
         elif(self.j=='8'):
-            print("Wyświetlam Loginy")
+            #print("Wyświetlam Loginy")
             self.ShowLogins()
             self.Admin_Users()
         elif(self.j=='9'):
-            print("Zmieniam hasło")
+            #print("Zmieniam hasło")
             self.ShowLogins()
             self.ChangePass()
             self.Admin_Users()
         elif(self.j=='a' or self.j=='A'):
-            print("Odblokuj konto")
+            #print("Odblokuj konto")
             self.ShowLogins()
             self.UnBlockAccount()
             self.Admin_Users()
         elif(self.j=='s' or self.j=='S'):
-            print("Odblokuj konto")
+            #print("Odblokuj konto")
             self.ShowLogins()
             self.BlockAccountSelf()
             self.Admin_Users()            
         elif(self.j=='b' or self.j=='B'):
-            print("Cofam do poprzedniego Menu")
+            #print("Cofam do poprzedniego Menu")
             self.Admin()
         else:
             print("Podano nieprawidlowa opcje dozwolone(1,2,3,4,5,6,7,8,9,B,A,S)");
             self.Admin_Users()
-        
+   
+    ################# Podmenu Administrator słuzace do obslugi zadan    
     def Admin_Reports(self):
         self.j = input(" (1)-Wyświetl Zgłoszenia, \n (2)-Zaktualizuj zgłoszenie, \n (3)-Zamknij zgłoszenie, \n (4)-Usun zgłoszenie, \n (B)-cofnij \n Wybor: ")
         if(self.j=='1'):
-            print("Wyświetlam Zgłoszenia")
+            #print("Wyświetlam Zgłoszenia")
             self.ShowAllReports()
             self.Admin_Reports()
         elif(self.j=='2'):
-            print("Modyfikuje Zgłoszenia")
+            #print("Modyfikuje Zgłoszenia")
             self.ShowAllReports()
             self.UpdateReport()
             self.Admin_Reports()
         elif(self.j=='3'):
-            print("Zamykam Zgłoszenie")
+            #print("Zamykam Zgłoszenie")
             self.ShowAllReports()
             self.CloseReport()
             self.Admin_Reports()
         elif(self.j=='4'):
-            print("Usuwam Zgłoszenie")
+            #print("Usuwam Zgłoszenie")
             self.ShowAllReports()
             self.DeleteReport()
             self.Admin_Reports()
         elif(self.j=='b' or self.j=='B'):
-            print("Cofam do poprzedniego Menu")
+            #print("Cofam do poprzedniego Menu")
             self.Admin()
         else:
             print("Podano nieprawidlowa opcje dozwolone(1,2,3,4,B)");
             self.Admin_Reports()        
             
-            
+    ###################### Podmenu Admina sluzace do obslugi systemu ###############################        
     def Admin_Sys(self):    
         self.j = input(" (1)-Wyświetl wszystkie statusy, \n (2)-Dodaj Nowy status, \n (3)-Usun status \n  ================================= \n (4)-Wyświetl wszystkie Priorytety, \n (5)-Dodaj Priorytet, \n (6)-Usun Priorytet, \n  ================================= \n (7)-Wyświetl wszystkie dzialy, \n (8)-Dodaj dzial, \n (9)-Usun dzial, \n=====================\n (B)-cofnij \n Wybor: ")
         if(self.j=='1'):
-            print("Wyświetlam Wszystkie statusy")
+            #print("Wyświetlam Wszystkie statusy")
             self.AllStatus()
             self.Admin_Sys()
         elif(self.j=='2'):
-            print("Dodaje nowy status")
+            #print("Dodaje nowy status")
             self.AddStatus()
             self.Admin_Sys()
         elif(self.j=='3'):
-            print("Usuwam status")
+            #print("Usuwam status")
             self.AllStatus() 
             self.DeleteStatus()
             self.Admin_Sys()
         elif(self.j=='4'):
-            print("Wyświetlam Wszystkie priorytety")
+            #print("Wyświetlam Wszystkie priorytety")
             self.AllPriority()
             self.Admin_Sys()
         elif(self.j=='5'):
-            print("Dodaje nowy Priorytet")
+            #print("Dodaje nowy Priorytet")
             self.AddPriority()
             self.Admin_Sys()
         elif(self.j=='6'):
-            print("Usuwam Priorytet")
+            #print("Usuwam Priorytet")
             self.AllPriority()
             self.DeletePriority()
             self.Admin_Sys()
         elif(self.j=='7'):
-            print("Wyświetlam Wszystkie dzialy")
+            #print("Wyświetlam Wszystkie dzialy")
             self.AllDivisions()
             self.Admin_Sys()
         elif(self.j=='8'):
-            print("Dodaje nowy dzial")
+            #print("Dodaje nowy dzial")
             self.AddDivision()
             self.Admin_Sys()
         elif(self.j=='9'):
-            print("Usuwam dzial")
+            #print("Usuwam dzial")
             self.AllDivisions()
             self.DeleteDivision()
             self.Admin_Sys()
         elif(self.j=='b' or self.j=='B'):
-            print("Cofam do poprzedniego Menu")
+            #print("Cofam do poprzedniego Menu")
             self.Admin()        
         else:
-            print("Podano nieprawidlowa opcje, dozwolone(1,2,3,4,5,6,B)");
+            print("Podano nieprawidlowa opcje, dozwolone(1,2,3,4,5,6,7,8,9,B)");
             self.Admin_Sys() 
             
+     #######################   Metoda dodawania uzytkownikow ###################    
     def AddUser(self):
         self.NLogin=input("Podaj nowy Login: ")
         self.NPass=input("Podaj hasło: ")
@@ -180,7 +183,7 @@ class CAdmin(CRepairer):
             print("Podano nieprawidłowy parametr dozwolone(rep,req) ")
             self.AddUser()
 
-    ######Uzupełnic ##########    
+    ###### Metoda ktora jest wywolywana gdy przy zakladaniu uzytkownika podany jest jako rep lub req sluzy do uzupelniania danych kontaktowych ##########    
     def AddRequester(self): 
         self.ID_Login_req=''
         self.sql26 = "SELECT * FROM logins left join requester on requester.ID_Login_req=logins.ID_L where logins.login=%s"
@@ -188,7 +191,7 @@ class CAdmin(CRepairer):
         self.results = self.cursor.fetchall() 
         for row in self.results:
             self.ID_Login_req = row[0] 
-        print(self.ID_Login_req)
+        #print(self.ID_Login_req)
         
         self.name_req = input("Podaj Imie uzytkownika: ")
         self.surname_req = input("Podaj Nazwisko uzytkownika: ")
@@ -198,6 +201,7 @@ class CAdmin(CRepairer):
         self.conn.commit()
         print("Wprowadzanie nowego usera przebieglo pomyslnie")
 
+        ######Metoda ktora jest wywolywana gdy przy zakladaniu uzytkownika podany jest jako rep lub req sluzy do uzupelniania danych kontaktowych ##########  
     def AddRepairer(self): 
         self.ID_Login_rep=''
         self.sql27 = "SELECT * FROM logins left join repairers on repairers.ID_Login_rep=logins.ID_L where logins.login=%s"
@@ -205,7 +209,7 @@ class CAdmin(CRepairer):
         self.results = self.cursor.fetchall() 
         for row in self.results:
             self.ID_Login_rep = row[0] 
-        print(self.ID_Login_rep)
+        #print(self.ID_Login_rep)
         
         self.name_rep = input("Podaj Imie serwisanta: ")
         self.surname_rep = input("Podaj Nazwisko serwisanta: ")
@@ -221,7 +225,8 @@ class CAdmin(CRepairer):
         else:
             print("Podano nieprawidłowy numer dzialu")
             self.AddRepairer()
-            
+    
+    ################# Metoda sluzy do zabezpieczenia wpisywania nieporzadanej dywizji ################        
     def CountDivision(self):
         self.number_of_branches =''
         self.sql29= "select count(ID_D) from divisions"
@@ -231,6 +236,10 @@ class CAdmin(CRepairer):
             self.number_of_branches = row[0]
             
         #print(self.number_of_branches)    
+        
+        
+        ###################### Metoda sluzaca do zmiany hasla uzytkownika #############
+        
     def ChangePass(self):
         self.ID_L = input("Podaj ID uzytkownika do zmiany hasła: ") 
         self.NPass = input("Podaj nowe hasło: ")
@@ -239,6 +248,8 @@ class CAdmin(CRepairer):
         self.conn.commit()
         print("Hasło zostało zmienione pomyślnie")
 
+
+        ###################### Metoda pokazujaca wszystkich Serwisantow ################
     def ShowRepairers(self):
         self.sql30  = "SELECT * FROM repairers"
         self.cursor.execute(self.sql30)
@@ -253,7 +264,7 @@ class CAdmin(CRepairer):
             self.division_repp = row[5]
             print ("%5s%5s%15s%15s%25s%20s" % (self.ID_rep,self.ID_Login_repp, self.Name_repp,self.Surname_repp,self.Email_repp,self.division_repp))
     
-    
+        ########### Metoda pokazuja wszystkich urzytkownikow ######################   
     def ShowRequesters(self):
         self.sql31  = "SELECT * FROM requester"
         self.cursor.execute(self.sql31)
@@ -266,7 +277,9 @@ class CAdmin(CRepairer):
             self.Surname_reqq = row[3]
             self.Email_reqq = row[4]
             print ("%5s%5s%15s%15s%25s" % (self.ID_req,self.ID_Login_reqq, self.Name_reqq,self.Surname_reqq,self.Email_reqq))        
-
+        
+        
+        ################ Metoda sluzaca do zaktualizowania danych kontaktowych serwisanta ##############
     def UpdateRepairer(self):
         self.ID_repp = input("Podaj ID serwisanta którego chcesz zaktualizować: ")
         self.name_repp = input("Podaj imie: ")
@@ -284,6 +297,7 @@ class CAdmin(CRepairer):
             print("Podano nieprawidłowy numer dzialu")
             self.UpdateRepairer()
             
+            ################ Metoda sluzaca do zaktualizowania danych kontaktowych Uzytkownika ##############    
     def UpdateRequester(self):
         self.ID_reqq = input("Podaj ID Uzytkownika którego chcesz zaktualizować: ")
         self.name_reqq = input("Podaj imie: ")
@@ -294,6 +308,8 @@ class CAdmin(CRepairer):
         self.conn.commit()
         print("UPDATE przebiegł pomyślnie")
         
+        
+        ########## Metoda pokazująca wszystkie statusy ##############
     def AllStatus(self): 
         self.sql16 = "SELECT * FROM statusy"
         self.cursor.execute(self.sql16)
@@ -303,14 +319,17 @@ class CAdmin(CRepairer):
             self.ID_S = row[0]
             self.Statuss = row[1]           	 
             print("%5s%30s" % (self.ID_S,self.Statuss))    
-
+            
+        ########## Metoda pozwalająca dodać nowy status ############
     def AddStatus(self):
         self.NStatus = input("Podaj nowy status:")
         self.sql17 ="INSERT INTO statusy (Status_s) VALUES (%s)"
         self.cursor.execute(self.sql17,(self.NStatus))
         self.conn.commit()
         print("Status dodano prawidłowo")
-
+        
+        
+        ################### Metoda ktora usuwa status #############
     def DeleteStatus(self):
         self.ID_S = input("Podaj ID Statusu do usunięcia: ")
         self.decyzja = input("Czy napewno chce usunac(t/n): ")        
@@ -321,7 +340,10 @@ class CAdmin(CRepairer):
             print("Status usunieto prawidłowo")
         else:
             self.DeleteStatus()
-
+            
+            
+        
+        #################### Metoda wyswietlajaca Wszystkie Priorytety #################
     def AllPriority(self): 
         self.sql19 = "SELECT * FROM priorities"
         self.cursor.execute(self.sql19)
@@ -331,14 +353,18 @@ class CAdmin(CRepairer):
             self.ID_P = row[0]
             self.priority  = row[1]           	 
             print ("%5s%20s" % (self.ID_P, self.priority ))
-
+            
+        
+        ################## Metoda która dodaje nowy priorytet ########################
     def AddPriority(self):
         self.NPriority = input("Podaj nowy Priorytet:")
         self.sql20 ="INSERT INTO priorities (priority_p) VALUES (%s)"
         self.cursor.execute(self.sql20,(self.NPriority))
         self.conn.commit()
         print("Priorytet dodano prawidłowo")
-
+        
+        
+        ################## Metoda pozwalająca na usunie cie priorytetu ###############
     def DeletePriority(self):
         self.Id_P = input("Podaj ID Priorytetu do usunięcia: ")
         self.decyzja = input("Czy napewno chce usunac(t/n): ")        
@@ -350,6 +376,8 @@ class CAdmin(CRepairer):
         else:
             self.DeletePriority()
 
+
+        ################## Metoda wyswietlajaca wszystkie oddzialy #################
     def AllDivisions(self):
         self.sql22 = "SELECT * FROM Divisions"
         self.cursor.execute(self.sql22)
@@ -359,14 +387,19 @@ class CAdmin(CRepairer):
             self.ID_d = row[0]
             self.TDivision = row[1]
             print ("%5s%15s" % (self.ID_d,self.TDivision))
-
+        
+        
+        
+        ################ Metoda pozwalajaca dodać nowy dzial #########################
     def AddDivision(self):
         self.NTDivision = input("Podaj nowy Oddzial:")
         self.sql23 ="INSERT INTO Divisions (Type_Division) VALUES (%s)"
         self.cursor.execute(self.sql23,(self.NTDivision))
         self.conn.commit()
         print("Oddział dodano prawidłowo")
-
+        
+        
+        ################# Metoda usuwajaca dzial #################################
     def DeleteDivision(self):
         self.ID_d = input("Podaj ID oddziału który chcesz usunąć: ")
         self.decyzja = input("Czy napewno chce usunac(t/n): ")        
@@ -377,7 +410,7 @@ class CAdmin(CRepairer):
             print("Oddział Usunięto prawidłowo")
         else:
             self.DeletePriority()
-            
+    ####################### Metoda usuwajaca Serwisanta #########################        
     def DeleteRepairer(self):
         self.ID_rep = input("Podaj id serwisanta do usuniecia: ")
         self.decyzja = input("Czy napewno chce usunac(t/n): ")        
@@ -386,14 +419,16 @@ class CAdmin(CRepairer):
             self.SelectDeleteLoginRep()
             self.sql34 = "DELETE FROM repairers WHERE ID_rep=%s"
             self.cursor.execute(self.sql34,(self.ID_rep))
-            
             self.DeleteLogin()            
             self.conn.commit()
             self.permissionDeleteOn()
             print("Serwisanta Usunięto prawidłowo")
         else:
             self.DeleteRepairer()
-            
+    
+    
+    
+    ####################### Metoda usuwająca uzytkownika #####################        
     def DeleteRequester(self):
         self.ID_req = input("Podaj id uzytkownika do usuniecia: ")
         self.decyzja = input("Czy napewno chce usunac(t/n): ")       
@@ -402,7 +437,6 @@ class CAdmin(CRepairer):
             self.SelectDeleteLoginReq()
             self.sql35 = "DELETE FROM requester WHERE ID_req=%s"
             self.cursor.execute(self.sql35,(self.ID_req))
-            
             self.DeleteLogin()            
             self.conn.commit()
             self.permissionDeleteOn()
@@ -410,7 +444,7 @@ class CAdmin(CRepairer):
         else:
             self.DeleteRequester()
      
-     
+    ################### Pomocnicza metoda ktora wyswietla ID serwisanta ktory jest usuwany  ################  
     def SelectDeleteLoginRep(self):
         self.ID_to_del=''
         self.sql36 = "SELECT * FROM logins LEFT JOIN repairers ON logins.ID_L=repairers.ID_Login_rep WHERE ID_rep=%s"
@@ -418,8 +452,10 @@ class CAdmin(CRepairer):
         self.results = self.cursor.fetchall()
         for row in self.results:
             self.ID_to_del = row[0]
-        print(self.ID_to_del)  
-        
+        #print(self.ID_to_del)  
+    
+    
+        ################### Pomocnicza metoda ktora wyswietla ID uzytkownika ktory jest usuwany  ################      
     def SelectDeleteLoginReq(self):
         self.ID_to_del=''
         self.sql36 = "SELECT * FROM logins LEFT JOIN requester ON logins.ID_L=requester.ID_Login_req WHERE ID_req=%s"
@@ -427,22 +463,27 @@ class CAdmin(CRepairer):
         self.results = self.cursor.fetchall()
         for row in self.results:
             self.ID_to_del = row[0]            
-        print(self.ID_to_del)
-        
+        #print(self.ID_to_del)
+    
+    ###################### Usuwa login uzytkownika lub serwisanta ktory zostal usuniety z bazy ######################## 
     def DeleteLogin(self):
-        print("DelLogin")
-        print(self.ID_to_del)
+        #print("DelLogin")
+        #print(self.ID_to_del)
         self.sql37 = "DELETE FROM logins WHERE ID_L=%s"
         self.cursor.execute(self.sql37,(self.ID_to_del))
         self.conn.commit()
-        
+   
+    ################### Pomocnicza metoda ktora wylacza sprawdzanie relacji miedzy tabelami w celu umozliwienia usuniecia rekordu#################     
     def permissionDeleteOff(self):
         self.sql38 = "SET foreign_key_checks = 0"
         self.cursor.execute(self.sql38)
+        
+        
+    ################### Pomocnicza metoda ktora ponownie wlacza sprawdzanie relacji miedzy tabelami #################
     def permissionDeleteOn(self):
         self.sql39 = "SET foreign_key_checks = 1"
         self.cursor.execute(self.sql39)        
-        
+    ################### Metoda pokazująca wszystkie loginy ale # haslo ###################################    
     def ShowLogins(self):
         self.sql40 = "SELECT * FROM logins"
         self.cursor.execute(self.sql40)
@@ -462,13 +503,14 @@ class CAdmin(CRepairer):
         self.cursor.execute(self.sql41,(self.login))
         self.conn.commit()     
     
-    ####### Odblokowanie Konta
+    ####### Metoda ktora sluzy do Odblokowania Konta ##################################
     def UnBlockAccount(self):
         self.ID_UnBlock_A = input("Podaj ID który chciał bys odblokować ")
         self.sql42 = "UPDATE Logins SET Locked=False where ID_L=%s"
         self.cursor.execute(self.sql42,(self.ID_UnBlock_A))
         self.conn.commit()   
     
+    ################## Reczne blokowanie konta #################################
     def BlockAccountSelf(self): 
         self.ID_Block_A = input("Podaj ID który chciał bys zablokować ")
         self.sql43 = "UPDATE Logins SET Locked=True where ID_L=%s"
