@@ -16,12 +16,11 @@ class CRequester:
         for row in self.results:
             self.ID_log_req = row[0]
         
-        print("Wyciagniety ID LOG: "+str(self.ID_log_req))  
+        #print("Wyciagniety ID LOG: "+str(self.ID_log_req))  
      
      
     ################ Glowne Menu uzytkownika #######################    
     def requester(self):
-        print('logowanie poprawne reqester')
         self.i = input('Co chcesz zrobić: \n 1.-Dodaj zgłoszenie \n 2. Podejrzj zgłoszenie \n 3. Otwrzo ponownie zgłoszenie \n(Q)-wyjście \n Wybor: ')
         if(self.i == '1'):
             #print("Dodaje zgłoszenie")
@@ -36,7 +35,6 @@ class CRequester:
         elif(self.i=='3'):
             #print("Otwieram zgłoszenie")
             self.ID_login_req()
-            self.ShowReportsReq()
             self.OpenReport()
             self.requester()
         elif((self.i == 'q') or (self.i == 'Q')):
@@ -48,17 +46,41 @@ class CRequester:
      
     ############### Metoda ktora pozwala ponownie otworzyc zgloszenie ######################        
     def OpenReport(self):
+        self.ShowReportsReq()
         self.ID = input("Podaj ID Zgłoszenia do Otwarcia: ")
-        self.status_z = input("Zmien Status na (2 - W realizacji )")
-        if(self.status_z=="2"):
-            self.sql11 = "UPDATE reports SET Status=%s WHERE (ID_Z=%s and requester=%s)"
-            self.cursor.execute(self.sql11,(self.status_z,self.ID,self.ID_log_req))
-            self.conn.commit()
-            print("Status zmieniono pomyślnie")
+        self.secOpenRep()
+        if(self.ID is ''):
+            print("\n")
+            print("Podano nieprawidlowy parametr dozwolone "+str(self.TabSecdel))
+            print("\n")
+            self.OpenReport()         
+        elif(((self.ID) in str(self.TabSecdel))==True):
+            self.status_z = input("Zmien Status na (2 - W realizacji )")
+            if(self.status_z=="2"):
+                self.sql11 = "UPDATE reports SET Status=%s WHERE (ID_Z=%s and requester=%s)"
+                self.cursor.execute(self.sql11,(self.status_z,self.ID,self.ID_log_req))
+                self.conn.commit()
+                print("Status zmieniono pomyślnie")
+            else:
+                print("\n")
+                print("Podano zły parametr dozwolony tylko 2 - W realizacji")
+                print("\n")
+                self.OpenReport()
         else:
-            print("Podano zły parametr dozwolony tylko 2 - W realizacji")
-            self.OpenReport        
-    
+            print("\n")
+            print("Podałes nieprawidlowy numer dozwolone"+str(self.TabSecdel))
+            print("\n")
+            self.OpenReport()
+    ############### Metoda która wyciaga ID loginu uzytkownika pomaga zabezpieczyc otwieranei nieswojego zgloszenia #########        
+    def secOpenRep(self):
+        self.TabSecdel = []
+        self.sqlsecOR="SELECT * from reports WHERE requester=%s"
+        self.cursor.execute(self.sqlsecOR,(self.ID_log_req))
+        self.results=self.cursor.fetchall()
+        for row in self.results:
+            self.TabSecdel.append(row[0])        
+            
+        print(str(self.TabSecdel))
     ################ Metoda ktora losuje serwisanta do zgloszenia #######################      
     def list_of_repairers(self):
         self.Lista=[]
@@ -79,10 +101,16 @@ class CRequester:
         #print(self.logrep)
         self.data=datetime.date.today()
         #print(self.data)
-        self.prior = input("Podaj Priorytet: ") 
-        self.sql5 = "INSERT INTO reports (Title, description,Requester,Repairer,Data_R,priority) VALUES (%s,%s,%s,%s,%s,%s)"
-        self.cursor.execute(self.sql5,(self.title,self.descr,self.ID_log_req,self.logrep,self.data,self.prior))
-        self.conn.commit()
+        self.prior = input("Podaj Priorytet: ")
+        if(self.prior=="1" or self.prior=="2" or self.prior=="3" or self.prior=="4"):
+            self.sql5 = "INSERT INTO reports (Title, description,Requester,Repairer,Data_R,priority) VALUES (%s,%s,%s,%s,%s,%s)"
+            self.cursor.execute(self.sql5,(self.title,self.descr,self.ID_log_req,self.logrep,self.data,self.prior))
+            self.conn.commit()
+        else:
+            print("\n")
+            print("Podano zły parametr dozwolone 1,2,3,4")
+            print("\n")
+            self.AddReports()
                
     ########################### Metoda ktora pokazje zgloszenia tylko zalogowanego serwisanta ##################################    
     def ShowReportsReq(self):   

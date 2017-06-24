@@ -27,22 +27,19 @@ class CRepairer():
         self.i = input('Co robimy: \n (1)-Wyświetl Zgłoszenia, \n (2)-Podejrzyj swoje zgłoszenia, \n (3)-Zamknij zgłoszenie, \n (4)-Zaktualizuj zgłoszenie, \n (5)-Usun zgłoszenie, \n (Q)-wyjście \n Wybór: ')
         if (self.i =='1'):         
             self.ShowAllReports()
-            self.logowanie()        
+            self.repairer()        
         elif(self.i == '2'):     
             self.ShowReportsRep()
-            self.logowanie()
+            self.repairer()
         elif(self.i=='3'):
-            self.ShowAllReports()
             self.CloseReport()
-            self.logowanie()
+            self.repairer()
         elif(self.i=='4'):
-            self.ShowAllReports()
             self.UpdateReport()
-            self.logowanie()    
+            self.repairer()    
         elif(self.i=='5'):
-            self.ShowAllReports()
             self.DeleteReport()
-            self.logowanie()
+            self.repairer()
         elif(self.i=='q' or self.i=='Q'):
             print('koniec')
         else:
@@ -86,45 +83,94 @@ class CRepairer():
             
     ###################### Metoda sluzaca do zamkniecia zglszenia #####################################        
     def CloseReport(self):
+        self.ShowAllReports()
         self.ID = input("Podaj ID Zgłoszenia do zamknięcia: ")
-        self.status_z = input("Zmien Status : (3-Zamknięte )")
-        if(self.status_z=='1' or self.status_z=='2' or self.status_z=='3'):
-            self.sql3 = "UPDATE reports SET Status=%s WHERE ID_Z=%s"
-            self.cursor.execute(self.sql3,(self.status_z,self.ID))
+        self.secDeleteRep()
+        if(self.ID is ''):
+            print("\n")
+            print("Podałes nieprawidlowy numer dozwolone "+str(self.TabSecdel))
+            print("\n")
+            self.CloseReport()              
+        elif(((self.ID) in str(self.TabSecdel))==True):
+            self.sql3 = "UPDATE reports SET Status=3 WHERE ID_Z=%s"
+            self.cursor.execute(self.sql3,(self.ID))
             self.conn.commit()
-            print("Status zmieniono pomyślnie")
+            print("Status zmieniono pomyślnie")                     
         else:
-            print("Podano zły parametr dozwolone 1,2,3")
+            print("\n")
+            print("Podałes nieprawidlowy numer dozwolone "+str(self.TabSecdel))
+            print("\n")
             self.CloseReport()
-            
+         
     ################################ Metoda sluzaca do aktualizacji opisu zgloszen ###########################        
     def UpdateReport(self):
+        self.ShowAllReports()
         self.ID = input("Podaj ID Zgłoszenie do Update: ")
-        self.title = input("Podaj Tytul: ")
-        self.description = input("Podaj opis: ")    
-        self.priority = input("Podaj Priorytet: ")
-        if(self.priority=="1" or self.priority=="2" or self.priority=="3" or self.priority=="4"):
-            self.status_z = input("Zmien Status(1-Oczekuje, 2-W realizacji, 3-Zamknięte ):  ")
-            if(self.status_z=='1' or self.status_z=='2' or self.status_z=='3'):
-                self.sql9 = "UPDATE reports SET Title=%s,description=%s,Status=%s,priority=%s WHERE ID_Z=%s"
-                self.cursor.execute(self.sql9,(self.title, self.description,self.status_z,self.priority,self.ID))
-                self.conn.commit() 
-                print("Update przeszedł pomyślnie")
+        self.secDeleteRep()
+        if(self.ID is ''):
+            print("\n")
+            print("Podano nieprawidlowy parametr dozwolone "+str(self.TabSecdel))
+            print("\n")
+            self.UpdateReport()                      
+        elif(((self.ID) in str(self.TabSecdel))==True):        
+            self.title = input("Podaj Tytul: ")
+            self.description = input("Podaj opis: ")    
+            self.priority = input("Podaj Priorytet: ")
+            if(self.priority=="1" or self.priority=="2" or self.priority=="3" or self.priority=="4"):
+                self.status_z = input("Zmien Status(1-Oczekuje, 2-W realizacji, 3-Zamknięte ):  ")
+                if(self.status_z=='1' or self.status_z=='2' or self.status_z=='3'):
+                    self.sql9 = "UPDATE reports SET Title=%s,description=%s,Status=%s,priority=%s WHERE ID_Z=%s"
+                    self.cursor.execute(self.sql9,(self.title, self.description,self.status_z,self.priority,self.ID))
+                    self.conn.commit() 
+                    print("Update przeszedł pomyślnie")
+                else:
+                    print("\n")
+                    print("Podano zły parametr dozwolone 1,2,3")
+                    print("\n")
+                    self.UpdateReport()
             else:
-                print("Podano zły parametr(dozwolone 1,2,3")
+                print("\n")
+                print("Podano zły parametr dozwolone 1,2,3,4")
+                print("\n")
                 self.UpdateReport()
         else:
-            print("Podano zły parametr dozwolone 1,2,3,4")
+            print("\n")
+            print("Podano nieprawidlowy numer dozwolone "+str(self.TabSecdel))
+            print("\n")
             self.UpdateReport()
-        
+              
     ############################ Metoda pozwalajaca na usuniecie zgloszenia ################################    
     def DeleteReport(self):
+        self.ShowAllReports()
         self.lp = input("Podaj ID Zgłoszenia do usuniecia: ")
-        self.decyzja = input("Czy napewno chce usunac(t/n): ")        
-        if(self.decyzja=='t'):
-            self.sql10 = "DELETE FROM reports WHERE ID_Z=%s"
-            self.cursor.execute(self.sql10,(self.lp))            
-            self.conn.commit()
-            print("Usunięto prawidłowo")
+        self.secDeleteRep()
+        if(self.lp is ''):
+            print("\n")
+            print("Podano nieprawidlowy parametr dozwolone "+str(self.TabSecdel))
+            print("\n")
+            self.DeleteReport()         
+        elif((self.lp) in str(self.TabSecdel)==True):
+            self.decyzja = input("Czy napewno chce usunac(t/n): ")        
+            if(self.decyzja=='t'):
+                self.sql10 = "DELETE FROM reports WHERE ID_Z=%s"
+                self.cursor.execute(self.sql10,(self.lp))            
+                self.conn.commit()
+                print("Usunięto prawidłowo")
+            else:
+                print("\n")
+                self.DeleteReport()
         else:
+            print("\n")
+            print("Podano nieprawidlowy numer dozwolone "+str(self.TabSecdel))
+            print("\n")
             self.DeleteReport()
+         
+    #####################  Metoda pomagajaca zabezpieczac metode do usuwania raportow #####################
+    def secDeleteRep(self):
+        self.TabSecdel = []
+        self.sqlsec="SELECT * from reports"
+        self.cursor.execute(self.sqlsec)
+        self.results=self.cursor.fetchall()
+        for row in self.results:
+            self.TabSecdel.append(row[0])        
+            

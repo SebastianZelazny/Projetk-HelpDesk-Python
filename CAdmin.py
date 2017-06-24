@@ -247,7 +247,7 @@ class CAdmin(CRepairer):
         self.cursor.execute(self.sql14,(self.NPass, self.ID_L))
         self.conn.commit()
         print("Hasło zostało zmienione pomyślnie")
-
+    
 
         ###################### Metoda pokazujaca wszystkich Serwisantow ################
     def ShowRepairers(self):
